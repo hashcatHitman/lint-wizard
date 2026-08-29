@@ -4,6 +4,8 @@
 
 use core::fmt::{self, Display};
 
+use crate::lints::{BasicLint, LintLevel};
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum RustcGroup {
     DeprecatedSafe,
@@ -62,5 +64,45 @@ impl<'src> TryFrom<&'src str> for RustcGroup {
             "unused" => Ok(Self::Unused),
             other => Err(other),
         }
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub struct GroupedRustcLint<'src> {
+    name: &'src str,
+    group: Option<RustcGroup>,
+    default_level: LintLevel,
+    meaning: &'src str,
+}
+
+impl<'src> GroupedRustcLint<'src> {
+    pub const fn new(base: BasicLint<'src>, group: Option<RustcGroup>) -> Self {
+        let BasicLint {
+            name,
+            default_level,
+            meaning,
+        } = base;
+        Self {
+            name,
+            group,
+            default_level,
+            meaning,
+        }
+    }
+
+    pub const fn name(self) -> &'src str {
+        self.name
+    }
+
+    pub const fn group(self) -> Option<RustcGroup> {
+        self.group
+    }
+
+    pub const fn default_level(self) -> LintLevel {
+        self.default_level
+    }
+
+    pub const fn meaning(self) -> &'src str {
+        self.meaning
     }
 }
