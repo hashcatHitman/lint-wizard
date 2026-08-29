@@ -38,5 +38,23 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         println!("{lint}\n\t{default}\n\t{meaning}\n");
     }
 
+    for (group, members) in stdout
+        .lines()
+        .map(str::trim)
+        .skip_while(|line| !line.contains("----  ---------"))
+        .skip(1)
+        .map(|line| line.split_once(char::is_whitespace))
+        .take_while(Option::is_some)
+        .flatten()
+        .map(|(group_name, tail)| {
+            (
+                group_name,
+                tail.trim().split(", ").map(str::trim).collect::<Vec<_>>(),
+            )
+        })
+    {
+        println!("{group}\n\t{members:?}\n");
+    }
+
     Ok(())
 }
