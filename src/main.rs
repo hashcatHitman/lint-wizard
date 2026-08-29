@@ -20,13 +20,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let stdout = String::from_utf8(out.stdout)?;
 
-    for cleaned in stdout
+    for (lint, tail) in stdout
         .lines()
         .map(str::trim)
         .skip_while(|line| !line.contains("----  -------  -------"))
         .skip(1)
+        .map(|line| line.split_once(char::is_whitespace))
+        .take_while(Option::is_some)
+        .flatten()
     {
-        println!("{cleaned}");
+        println!("{lint}\n\t{tail}\n");
     }
 
     Ok(())
