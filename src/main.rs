@@ -20,9 +20,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let stdout = String::from_utf8(out.stdout)?;
 
-    for [lint, default, meaning] in stdout
-        .lines()
-        .map(str::trim)
+    let mut stdout_lines = stdout.lines().map(str::trim);
+
+    for [lint, default, meaning] in stdout_lines
+        .by_ref()
         .skip_while(|line| !line.contains("----  -------  -------"))
         .skip(1)
         .map(|line| line.split_once(char::is_whitespace))
@@ -38,9 +39,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         println!("{lint}\n\t{default}\n\t{meaning}\n");
     }
 
-    for (group, members) in stdout
-        .lines()
-        .map(str::trim)
+    for (group, members) in stdout_lines
+        .by_ref()
         .skip_while(|line| !line.contains("----  ---------"))
         .skip(1)
         .map(|line| line.split_once(char::is_whitespace))
