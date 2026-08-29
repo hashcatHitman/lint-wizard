@@ -53,8 +53,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         println!("{group}\n\t{members:?}\n");
     }
 
-    for (lint, default, meaning) in clippy_lints {
-        println!("{lint}\n\t{default}\n\t{meaning}\n");
+    for clippy_lint in clippy_lints {
+        println!(
+            "{}\n\t{}\n\t{}\n",
+            clippy_lint.name(),
+            clippy_lint.default_level(),
+            clippy_lint.meaning()
+        );
     }
 
     for (group, members) in clippy_groups {
