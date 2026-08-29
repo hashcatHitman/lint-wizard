@@ -3,18 +3,18 @@
 # SPDX-License-Identifier: Apache-2.0 OR MIT
 
 [package]
-name = "rust_project_template"
+name = "lint_wizard"
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.97.1"
 description = """
-A base for me to use as the starting point of my projects written in Rust.
+A tool for maintaining lint configurations.
 """
 readme = "README.md"
-repository = "https://github.com/hashcatHitman/rust_project_template"
+repository = "https://github.com/hashcatHitman/lint_wizard"
 license = "Apache-2.0 OR MIT"
-keywords = ["project-template"]
-categories = ["rust-patterns", "development-tools"]
+keywords = ["clippy", "lints", "configuration"]
+categories = ["command-line-utilities", "development-tools"]
 publish = false
 
 [dependencies]
