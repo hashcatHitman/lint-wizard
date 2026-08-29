@@ -19,7 +19,9 @@
 use core::iter::Map;
 use core::str::Lines;
 
-use crate::lints::{BasicLint, ClippyGroup, LintLevel, RustcGroup};
+use crate::lints::clippy::ClippyGroup;
+use crate::lints::rustc::RustcGroup;
+use crate::lints::{BasicLint, LintLevel};
 
 pub mod lints;
 
