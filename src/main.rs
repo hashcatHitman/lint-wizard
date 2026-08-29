@@ -19,13 +19,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .output()?;
 
     let stdout = String::from_utf8(out.stdout)?;
-    let stderr = String::from_utf8(out.stderr)?;
 
-    println!("STDOUT:\n");
-    println!("{stdout}\n");
-
-    println!("STDERR:\n");
-    println!("{stderr}\n");
+    for cleaned in stdout.lines().map(str::trim) {
+        println!("{cleaned}");
+    }
 
     Ok(())
 }
