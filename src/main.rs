@@ -10,5 +10,5 @@
 /// println!("hello")
 /// ```
 fn main() {
-    println!("{}", rust_project_template::read_a_book());
+    println!("{}", lint_wizard::read_a_book());
 }
