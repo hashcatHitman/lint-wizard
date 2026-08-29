@@ -32,13 +32,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let stdout = String::from_utf8(out.stdout)?;
 
-    let (rustc_lints_grouped, clippy_lints, clippy_groups) =
-        Initialized::new(&stdout)
-            .parse_rustc_lints()
-            .parse_rustc_groups()
-            .parse_clippy_lints()
-            .parse_clippy_groups()
-            .collect();
+    let (rustc_lints_grouped, clippy_lints_grouped) = Initialized::new(&stdout)
+        .parse_rustc_lints()
+        .parse_rustc_groups()
+        .parse_clippy_lints()
+        .parse_clippy_groups()
+        .collect();
 
     for rustc_lint in rustc_lints_grouped {
         println!(
@@ -53,17 +52,19 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         );
     }
 
-    for clippy_lint in clippy_lints {
+    for clippy_lint in clippy_lints_grouped {
         println!(
-            "{}\n\t{}\n\t{}\n",
+            "{}\n\t{}\n\t{}\n\t{}\n\t{}\n",
             clippy_lint.name(),
+            clippy_lint.primary_group(),
+            if clippy_lint.is_in_clippy_all() {
+                "in clippy::all"
+            } else {
+                "not in clippy::all"
+            },
             clippy_lint.default_level(),
             clippy_lint.meaning()
         );
-    }
-
-    for (group, members) in clippy_groups {
-        println!("{group}\n\t{members:?}\n");
     }
 
     Ok(())

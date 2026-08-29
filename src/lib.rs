@@ -19,7 +19,7 @@
 use core::iter::Map;
 use core::str::Lines;
 
-use crate::lints::clippy::ClippyGroup;
+use crate::lints::clippy::{ClippyGroup, GroupedClippyLint};
 use crate::lints::rustc::{GroupedRustcLint, RustcGroup};
 use crate::lints::{BasicLint, LintLevel};
 
@@ -167,18 +167,54 @@ pub struct ParsedClippyLints<'src> {
 }
 
 impl<'src> ParsedClippyLints<'src> {
-    pub fn parse_clippy_groups(mut self) -> ParsedClippyGroups<'src> {
-        let clippy_groups: Vec<_> = extract_next_groups(self.state.by_ref())
+    pub fn parse_clippy_groups(self) -> ParsedClippyGroups<'src> {
+        let Self {
+            mut state,
+            rustc_lints_grouped,
+            mut clippy_lints,
+        } = self;
+        let mut clippy_all = Vec::new();
+        let clippy_groups: Vec<_> = extract_next_groups(state.by_ref())
             .filter_map(|(group, members)| {
-                ClippyGroup::try_from(group)
-                    .ok()
-                    .map(|group| (group, members))
+                if "clippy::all" == group {
+                    clippy_all = members;
+                    None
+                } else {
+                    ClippyGroup::try_from(group)
+                        .ok()
+                        .map(|group| (group, members))
+                }
             })
             .collect();
+
+        clippy_lints.sort();
+        let pregroup_count = clippy_lints.len();
+
+        let mut clippy_lints_grouped = Vec::with_capacity(pregroup_count);
+
+        for lint in clippy_lints {
+            for &(group, ref members) in &clippy_groups {
+                if members.contains(&lint.name()) {
+                    let is_in_clippy_all = clippy_all.contains(&lint.name());
+                    let grouped =
+                        GroupedClippyLint::new(lint, group, is_in_clippy_all);
+
+                    clippy_lints_grouped.push(grouped);
+                    break;
+                }
+            }
+        }
+
+        if pregroup_count != clippy_lints_grouped.len() {
+            eprintln!(
+                "WARNING: Only {} of {pregroup_count} clippy lints survived group assignment!",
+                clippy_lints_grouped.len(),
+            );
+        }
+
         ParsedClippyGroups {
-            rustc_lints_grouped: self.rustc_lints_grouped,
-            clippy_lints: self.clippy_lints,
-            clippy_groups,
+            rustc_lints_grouped,
+            clippy_lints_grouped,
         }
     }
 }
@@ -186,23 +222,17 @@ impl<'src> ParsedClippyLints<'src> {
 #[derive(Debug, Clone)]
 pub struct ParsedClippyGroups<'src> {
     rustc_lints_grouped: Vec<GroupedRustcLint<'src>>,
-    clippy_lints: Vec<BasicLint<'src>>,
-    clippy_groups: Vec<(ClippyGroup, Vec<&'src str>)>,
+    clippy_lints_grouped: Vec<GroupedClippyLint<'src>>,
 }
 
 impl<'src> ParsedClippyGroups<'src> {
     pub fn collect(
         self,
-    ) -> (
-        Vec<GroupedRustcLint<'src>>,
-        Vec<BasicLint<'src>>,
-        Vec<(ClippyGroup, Vec<&'src str>)>,
-    ) {
+    ) -> (Vec<GroupedRustcLint<'src>>, Vec<GroupedClippyLint<'src>>) {
         let Self {
             rustc_lints_grouped,
-            clippy_lints,
-            clippy_groups,
+            clippy_lints_grouped,
         } = self;
-        (rustc_lints_grouped, clippy_lints, clippy_groups)
+        (rustc_lints_grouped, clippy_lints_grouped)
     }
 }

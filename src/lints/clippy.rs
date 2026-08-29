@@ -4,6 +4,8 @@
 
 use core::fmt::{self, Display};
 
+use crate::lints::{BasicLint, LintLevel};
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum ClippyGroup {
     Correctness,
@@ -49,5 +51,55 @@ impl<'src> TryFrom<&'src str> for ClippyGroup {
             "clippy::cargo" => Ok(Self::Cargo),
             other => Err(other),
         }
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub struct GroupedClippyLint<'src> {
+    name: &'src str,
+    primary_group: ClippyGroup,
+    is_in_clippy_all: bool,
+    default_level: LintLevel,
+    meaning: &'src str,
+}
+
+impl<'src> GroupedClippyLint<'src> {
+    pub const fn new(
+        base: BasicLint<'src>,
+        primary_group: ClippyGroup,
+        is_in_clippy_all: bool,
+    ) -> Self {
+        let BasicLint {
+            name,
+            default_level,
+            meaning,
+        } = base;
+        Self {
+            name,
+            primary_group,
+            is_in_clippy_all,
+            default_level,
+            meaning,
+        }
+    }
+
+    pub const fn name(self) -> &'src str {
+        self.name
+    }
+
+    pub const fn primary_group(self) -> ClippyGroup {
+        self.primary_group
+    }
+
+    pub const fn is_in_clippy_all(self) -> bool {
+        self.is_in_clippy_all
+    }
+
+    pub const fn default_level(&self) -> LintLevel {
+        self.default_level
+    }
+
+    pub const fn meaning(self) -> &'src str {
+        self.meaning
     }
 }
