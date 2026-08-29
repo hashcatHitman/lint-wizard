@@ -39,3 +39,7 @@ criteria = "safe-to-deploy"
 [[exemptions.toml_datetime]]
 version = "1.0.0+spec-1.1.0"
 criteria = "safe-to-deploy"
+
+[[exemptions.toml_parser]]
+version = "1.0.9+spec-1.1.0"
+criteria = "safe-to-deploy"
