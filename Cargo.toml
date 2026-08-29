@@ -18,6 +18,7 @@ categories = ["command-line-utilities", "development-tools"]
 publish = false
 
 [dependencies]
+toml = "1.0.3"
 
 [profile.release]
 codegen-units = 1
