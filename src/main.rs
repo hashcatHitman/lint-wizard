@@ -20,7 +20,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let stdout = String::from_utf8(out.stdout)?;
 
-    for (lint, tail) in stdout
+    for [lint, default, meaning] in stdout
         .lines()
         .map(str::trim)
         .skip_while(|line| !line.contains("----  -------  -------"))
@@ -28,8 +28,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .map(|line| line.split_once(char::is_whitespace))
         .take_while(Option::is_some)
         .flatten()
+        .filter_map(|(lint, tail)| {
+            tail.trim()
+                .split_once(char::is_whitespace)
+                .map(|(default, meaning)| Some([lint, default, meaning.trim()]))
+        })
+        .flatten()
     {
-        println!("{lint}\n\t{tail}\n");
+        println!("{lint}\n\t{default}\n\t{meaning}\n");
     }
 
     Ok(())
