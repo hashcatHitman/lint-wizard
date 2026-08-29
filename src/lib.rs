@@ -25,7 +25,7 @@ pub mod lints;
 
 pub fn extract_next_lints<'src>(
     lines: &mut Map<Lines<'src>, fn(&str) -> &str>,
-) -> impl Iterator<Item = (&'src str, LintLevel, &'src str)> {
+) -> impl Iterator<Item = BasicLint<'src>> {
     lines
         .skip_while(|line| !line.contains("----  -------  -------"))
         .skip(1)
@@ -44,6 +44,9 @@ pub fn extract_next_lints<'src>(
                 LintLevel::try_from(default).expect("TODO"),
                 meaning,
             )
+        })
+        .map(|(name, default_level, meaning)| {
+            BasicLint::new(name, default_level, meaning)
         })
 }
 
@@ -77,11 +80,8 @@ impl<'src> Initialized<'src> {
     }
 
     pub fn parse_rustc_lints(mut self) -> ParsedRustcLints<'src> {
-        let rustc_lints: Vec<_> = extract_next_lints(self.state.by_ref())
-            .map(|(name, default_level, meaning)| {
-                BasicLint::new(name, default_level, meaning)
-            })
-            .collect();
+        let rustc_lints: Vec<_> =
+            extract_next_lints(self.state.by_ref()).collect();
         ParsedRustcLints {
             state: self.state,
             rustc_lints,
@@ -120,11 +120,8 @@ pub struct ParsedRustcGroups<'src> {
 }
 impl<'src> ParsedRustcGroups<'src> {
     pub fn parse_clippy_lints(mut self) -> ParsedClippyLints<'src> {
-        let clippy_lints: Vec<_> = extract_next_lints(self.state.by_ref())
-            .map(|(name, default_level, meaning)| {
-                BasicLint::new(name, default_level, meaning)
-            })
-            .collect();
+        let clippy_lints: Vec<_> =
+            extract_next_lints(self.state.by_ref()).collect();
         ParsedClippyLints {
             state: self.state,
             rustc_lints: self.rustc_lints,
