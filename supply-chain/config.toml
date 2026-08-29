@@ -15,3 +15,7 @@ url = "https://raw.githubusercontent.com/divviup/libprio-rs/main/supply-chain/au
 
 [imports.mozilla]
 url = "https://raw.githubusercontent.com/mozilla/supply-chain/main/audits.toml"
+
+[[exemptions.hashbrown]]
+version = "0.15.2"
+criteria = "safe-to-deploy"
