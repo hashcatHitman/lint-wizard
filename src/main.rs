@@ -4,6 +4,18 @@
 
 //! This isn't a real project.
 
+#![allow(
+    missing_docs,
+    clippy::missing_docs_in_private_items,
+    clippy::missing_panics_doc,
+    clippy::missing_errors_doc,
+    clippy::expect_used,
+    clippy::type_complexity,
+    clippy::use_debug,
+    clippy::unwrap_used,
+    reason = "todo later"
+)]
+
 use std::process;
 
 use lint_wizard::{self as _, Initialized};
