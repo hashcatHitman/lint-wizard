@@ -38,6 +38,39 @@ impl<'src> TryFrom<&'src str> for LintLevel {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub struct BasicLint<'src> {
+    name: &'src str,
+    default_level: LintLevel,
+    meaning: &'src str,
+}
+
+impl<'src> BasicLint<'src> {
+    pub const fn new(
+        name: &'src str,
+        default_level: LintLevel,
+        meaning: &'src str,
+    ) -> Self {
+        Self {
+            name,
+            default_level,
+            meaning,
+        }
+    }
+
+    pub const fn name(self) -> &'src str {
+        self.name
+    }
+
+    pub const fn default_level(self) -> LintLevel {
+        self.default_level
+    }
+
+    pub const fn meaning(self) -> &'src str {
+        self.meaning
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum RustcGroup {
     DeprecatedSafe,
     FutureIncompatible,

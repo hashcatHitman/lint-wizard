@@ -40,8 +40,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             .parse_clippy_groups()
             .collect();
 
-    for (lint, default, meaning) in rustc_lints {
-        println!("{lint}\n\t{default}\n\t{meaning}\n");
+    for rustc_lint in rustc_lints {
+        println!(
+            "{}\n\t{}\n\t{}\n",
+            rustc_lint.name(),
+            rustc_lint.default_level(),
+            rustc_lint.meaning()
+        );
     }
 
     for (group, members) in rustc_groups {
