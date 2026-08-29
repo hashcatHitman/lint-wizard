@@ -7,9 +7,13 @@
 use core::iter::Map;
 use core::str::Lines;
 
+use crate::lints::LintLevel;
+
+pub mod lints;
+
 pub fn extract_next_lints<'src>(
     lines: &mut Map<Lines<'src>, fn(&str) -> &str>,
-) -> Vec<[&'src str; 3]> {
+) -> Vec<(&'src str, LintLevel, &'src str)> {
     lines
         .skip_while(|line| !line.contains("----  -------  -------"))
         .skip(1)
@@ -22,6 +26,13 @@ pub fn extract_next_lints<'src>(
                 .map(|(default, meaning)| Some([lint, default, meaning.trim()]))
         })
         .flatten()
+        .map(|[lint_name, default, meaning]| {
+            (
+                lint_name,
+                LintLevel::try_from(default).expect("TODO"),
+                meaning,
+            )
+        })
         .collect()
 }
 
@@ -67,7 +78,7 @@ impl<'src> Initialized<'src> {
 #[derive(Debug, Clone)]
 pub struct ParsedRustcLints<'src> {
     state: Map<Lines<'src>, fn(&str) -> &str>,
-    rustc_lints: Vec<[&'src str; 3]>,
+    rustc_lints: Vec<(&'src str, LintLevel, &'src str)>,
 }
 
 impl<'src> ParsedRustcLints<'src> {
@@ -84,7 +95,7 @@ impl<'src> ParsedRustcLints<'src> {
 #[derive(Debug, Clone)]
 pub struct ParsedRustcGroups<'src> {
     state: Map<Lines<'src>, fn(&str) -> &str>,
-    rustc_lints: Vec<[&'src str; 3]>,
+    rustc_lints: Vec<(&'src str, LintLevel, &'src str)>,
     rustc_groups: Vec<(&'src str, Vec<&'src str>)>,
 }
 impl<'src> ParsedRustcGroups<'src> {
@@ -102,9 +113,9 @@ impl<'src> ParsedRustcGroups<'src> {
 #[derive(Debug, Clone)]
 pub struct ParsedClippyLints<'src> {
     state: Map<Lines<'src>, fn(&str) -> &str>,
-    rustc_lints: Vec<[&'src str; 3]>,
+    rustc_lints: Vec<(&'src str, LintLevel, &'src str)>,
     rustc_groups: Vec<(&'src str, Vec<&'src str>)>,
-    clippy_lints: Vec<[&'src str; 3]>,
+    clippy_lints: Vec<(&'src str, LintLevel, &'src str)>,
 }
 
 impl<'src> ParsedClippyLints<'src> {
@@ -121,9 +132,9 @@ impl<'src> ParsedClippyLints<'src> {
 
 #[derive(Debug, Clone)]
 pub struct ParsedClippyGroups<'src> {
-    rustc_lints: Vec<[&'src str; 3]>,
+    rustc_lints: Vec<(&'src str, LintLevel, &'src str)>,
     rustc_groups: Vec<(&'src str, Vec<&'src str>)>,
-    clippy_lints: Vec<[&'src str; 3]>,
+    clippy_lints: Vec<(&'src str, LintLevel, &'src str)>,
     clippy_groups: Vec<(&'src str, Vec<&'src str>)>,
 }
 
@@ -131,9 +142,9 @@ impl<'src> ParsedClippyGroups<'src> {
     pub fn collect(
         self,
     ) -> (
-        Vec<[&'src str; 3]>,
+        Vec<(&'src str, LintLevel, &'src str)>,
         Vec<(&'src str, Vec<&'src str>)>,
-        Vec<[&'src str; 3]>,
+        Vec<(&'src str, LintLevel, &'src str)>,
         Vec<(&'src str, Vec<&'src str>)>,
     ) {
         let Self {
