@@ -20,7 +20,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let stdout = String::from_utf8(out.stdout)?;
 
-    for cleaned in stdout.lines().map(str::trim) {
+    for cleaned in stdout
+        .lines()
+        .map(str::trim)
+        .skip_while(|line| !line.contains("----  -------  -------"))
+        .skip(1)
+    {
         println!("{cleaned}");
     }
 
