@@ -93,6 +93,10 @@ criteria = "safe-to-deploy"
 version = "1.0.9+spec-1.1.0"
 criteria = "safe-to-deploy"
 
+[[exemptions.typeid]]
+version = "1.0.3"
+criteria = "safe-to-deploy"
+
 [[exemptions.unicode-ident]]
 version = "1.0.24"
 criteria = "safe-to-deploy"
