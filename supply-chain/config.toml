@@ -78,6 +78,10 @@ version = "0.8.2"
 criteria = "safe-to-deploy"
 
 [[exemptions.toml]]
+version = "0.9.12+spec-1.1.0"
+criteria = "safe-to-deploy"
+
+[[exemptions.toml]]
 version = "1.0.3+spec-1.1.0"
 criteria = "safe-to-deploy"
 
