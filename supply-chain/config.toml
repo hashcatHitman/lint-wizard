@@ -101,6 +101,10 @@ criteria = "safe-to-deploy"
 version = "1.0.24"
 criteria = "safe-to-deploy"
 
+[[exemptions.url]]
+version = "2.5.8"
+criteria = "safe-to-deploy"
+
 [[exemptions.winnow]]
 version = "0.7.14"
 criteria = "safe-to-deploy"
