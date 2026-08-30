@@ -65,6 +65,10 @@ criteria = "safe-to-deploy"
 version = "2.0.117"
 criteria = "safe-to-deploy"
 
+[[exemptions.thiserror]]
+version = "2.0.17"
+criteria = "safe-to-deploy"
+
 [[exemptions.toml]]
 version = "1.0.3+spec-1.1.0"
 criteria = "safe-to-deploy"
