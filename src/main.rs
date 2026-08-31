@@ -19,6 +19,7 @@
 use std::{fs, process};
 
 use cargo_util_schemas::manifest::TomlManifest;
+use lint_wizard::config::ConfigManager;
 use lint_wizard::{self as _, Initialized};
 
 /// This isn't a real project.
@@ -40,19 +41,40 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .parse_clippy_groups()
         .collect();
 
-    for rustc_lint in rustc_lints_grouped {
+    let manifest_contents = fs::read_to_string("./Cargo.toml")?;
+    let manifest = toml::from_str::<TomlManifest>(&manifest_contents)?;
+    let manager = ConfigManager::new(manifest);
+
+    let (configured_rustc_lints, configured_rustc_groups) =
+        manager.configure_rustc_lints(rustc_lints_grouped)?;
+
+    let mut configured_rustc_groups: Vec<_> =
+        configured_rustc_groups.iter().collect();
+    configured_rustc_groups.sort_by_key(|&(group, _)| group);
+
+    println!("configured rustc groups:");
+    for (group, config) in configured_rustc_groups {
+        println!("{group}\n\t{config:?}\n");
+    }
+
+    println!("configured rustc lints:");
+    for rustc_lint in configured_rustc_lints {
         println!(
-            "{}\n\t{}\n\t{}\n\t{}\n",
+            "{}\n\t{}\n\t{}\n\t{}\n\t{}\n",
             rustc_lint.name(),
             rustc_lint.group().map_or_else(
                 || "NO GROUP".to_owned(),
                 |group| group.to_string()
             ),
             rustc_lint.default_level(),
+            rustc_lint
+                .configured_level()
+                .map_or_else(|| "unset".to_owned(), |level| level.to_string()),
             rustc_lint.meaning()
         );
     }
 
+    println!("grouped clippy lints:");
     for clippy_lint in clippy_lints_grouped {
         println!(
             "{}\n\t{}\n\t{}\n\t{}\n\t{}\n",
@@ -67,29 +89,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             clippy_lint.meaning()
         );
     }
-
-    let manifest_contents = fs::read_to_string("./Cargo.toml")?;
-    let manifest = toml::from_str::<TomlManifest>(&manifest_contents)?;
-
-    let manifest_lints = manifest.normalized_lints()?.unwrap();
-
-    let rust_lint_config = manifest_lints.get("rust").unwrap();
-
-    for (lint_name, config) in rust_lint_config {
-        println!("{lint_name}\n\t{config:?}\n");
-    }
-
-    let clippy_lint_config = manifest_lints.get("clippy").unwrap();
-
-    for (lint_name, config) in clippy_lint_config {
-        println!("{lint_name}\n\t{config:?}\n");
-    }
-
-    println!("Found config for {} rustc lints!\n", rust_lint_config.len());
-    println!(
-        "Found config for {} clippy lints!\n",
-        clippy_lint_config.len()
-    );
 
     Ok(())
 }

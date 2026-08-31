@@ -23,6 +23,7 @@ use crate::lints::clippy::{ClippyGroup, GroupedClippyLint};
 use crate::lints::rustc::{GroupedRustcLint, RustcGroup};
 use crate::lints::{BasicLint, LintLevel};
 
+pub mod config;
 pub mod lints;
 
 pub fn extract_next_lints<'src>(
