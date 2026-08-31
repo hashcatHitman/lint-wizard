@@ -74,10 +74,22 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         );
     }
 
-    println!("grouped clippy lints:");
-    for clippy_lint in clippy_lints_grouped {
+    let (configured_clippy_lints, configured_clippy_groups) =
+        manager.configure_clippy_lints(clippy_lints_grouped)?;
+
+    let mut configured_clippy_groups: Vec<_> =
+        configured_clippy_groups.iter().collect();
+    configured_clippy_groups.sort_by_key(|&(group, _)| group);
+
+    println!("configured clippy groups:");
+    for (group, config) in configured_clippy_groups {
+        println!("{group}\n\t{config:?}\n");
+    }
+
+    println!("configured clippy lints:");
+    for clippy_lint in configured_clippy_lints {
         println!(
-            "{}\n\t{}\n\t{}\n\t{}\n\t{}\n",
+            "{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n",
             clippy_lint.name(),
             clippy_lint.primary_group(),
             if clippy_lint.is_in_clippy_all() {
@@ -86,6 +98,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 "not in clippy::all"
             },
             clippy_lint.default_level(),
+            clippy_lint
+                .configured_level()
+                .map_or_else(|| "unset".to_owned(), |level| level.to_string()),
             clippy_lint.meaning()
         );
     }
