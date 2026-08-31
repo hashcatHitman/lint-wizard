@@ -106,3 +106,53 @@ impl<'src> GroupedRustcLint<'src> {
         self.meaning
     }
 }
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub struct ConfiguredRustcLint<'src> {
+    name: &'src str,
+    group: Option<RustcGroup>,
+    default_level: LintLevel,
+    configured_level: Option<LintLevel>,
+    meaning: &'src str,
+}
+
+impl<'src> ConfiguredRustcLint<'src> {
+    pub const fn new(
+        base: GroupedRustcLint<'src>,
+        configured_level: Option<LintLevel>,
+    ) -> Self {
+        let GroupedRustcLint {
+            name,
+            group,
+            default_level,
+            meaning,
+        } = base;
+        Self {
+            name,
+            group,
+            default_level,
+            configured_level,
+            meaning,
+        }
+    }
+
+    pub const fn name(self) -> &'src str {
+        self.name
+    }
+
+    pub const fn group(self) -> Option<RustcGroup> {
+        self.group
+    }
+
+    pub const fn default_level(&self) -> LintLevel {
+        self.default_level
+    }
+
+    pub const fn configured_level(&self) -> Option<LintLevel> {
+        self.configured_level
+    }
+
+    pub const fn meaning(self) -> &'src str {
+        self.meaning
+    }
+}
