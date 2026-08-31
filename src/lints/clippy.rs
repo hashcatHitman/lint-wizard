@@ -103,3 +103,60 @@ impl<'src> GroupedClippyLint<'src> {
         self.meaning
     }
 }
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub struct ConfiguredClippyLint<'src> {
+    name: &'src str,
+    primary_group: ClippyGroup,
+    is_in_clippy_all: bool,
+    default_level: LintLevel,
+    configured_level: Option<LintLevel>,
+    meaning: &'src str,
+}
+
+impl<'src> ConfiguredClippyLint<'src> {
+    pub const fn new(
+        base: GroupedClippyLint<'src>,
+        configured_level: Option<LintLevel>,
+    ) -> Self {
+        let GroupedClippyLint {
+            name,
+            primary_group,
+            is_in_clippy_all,
+            default_level,
+            meaning,
+        } = base;
+        Self {
+            name,
+            primary_group,
+            is_in_clippy_all,
+            default_level,
+            configured_level,
+            meaning,
+        }
+    }
+
+    pub const fn name(self) -> &'src str {
+        self.name
+    }
+
+    pub const fn primary_group(self) -> ClippyGroup {
+        self.primary_group
+    }
+
+    pub const fn is_in_clippy_all(self) -> bool {
+        self.is_in_clippy_all
+    }
+
+    pub const fn default_level(&self) -> LintLevel {
+        self.default_level
+    }
+
+    pub const fn configured_level(&self) -> Option<LintLevel> {
+        self.configured_level
+    }
+
+    pub const fn meaning(self) -> &'src str {
+        self.meaning
+    }
+}
