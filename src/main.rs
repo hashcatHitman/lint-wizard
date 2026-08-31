@@ -16,6 +16,7 @@
     reason = "todo later"
 )]
 
+use core::error::Error;
 use std::{fs, process};
 
 use cargo_util_schemas::manifest::TomlManifest;
@@ -27,7 +28,7 @@ use lint_wizard::{self as _, Initialized};
 /// ```rust
 /// println!("hello")
 /// ```
-fn main() -> Result<(), Box<dyn std::error::Error>> {
+fn main() -> Result<(), Box<dyn Error>> {
     let out = process::Command::new("clippy-driver")
         .arg("-Whelp")
         .output()?;
