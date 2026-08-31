@@ -4,6 +4,8 @@
 
 use core::fmt::{self, Display};
 
+use cargo_util_schemas::manifest::TomlLintLevel;
+
 pub mod clippy;
 pub mod rustc;
 
@@ -36,6 +38,17 @@ impl<'src> TryFrom<&'src str> for LintLevel {
             "deny" => Ok(Self::Deny),
             "forbid" => Ok(Self::Forbid),
             unknown => Err(unknown),
+        }
+    }
+}
+
+impl From<TomlLintLevel> for LintLevel {
+    fn from(value: TomlLintLevel) -> Self {
+        match value {
+            TomlLintLevel::Forbid => Self::Forbid,
+            TomlLintLevel::Deny => Self::Deny,
+            TomlLintLevel::Warn => Self::Warn,
+            TomlLintLevel::Allow => Self::Allow,
         }
     }
 }
