@@ -27,8 +27,8 @@ You should also have some version of git installed. You can refer to the
 Clone the repository and navigate inside it:
 
 ```bash
-git clone https://github.com/hashcatHitman/lint_wizard.git
-cd lint_wizard
+git clone https://github.com/hashcatHitman/lint-wizard.git
+cd lint-wizard
 ```
 
 If you'd like to read the documentation, the recommended way to do so is with:
@@ -46,8 +46,8 @@ cargo build --profile release --locked
 ```
 
 Cargo will download the dependencies and compile the project. It will probably
-be located at `./target/release/lint_wizard` or
-`./target/release/lint_wizard.exe`, depending on your system.
+be located at `./target/release/lint-wizard` or
+`./target/release/lint-wizard.exe`, depending on your system.
 
 ## MSRV Policy
 
@@ -67,20 +67,20 @@ it will exist.)
 [unsafe forbidden]: https://img.shields.io/badge/unsafe-forbidden-success.svg
 [safety dance]: https://github.com/rust-secure-code/safety-dance/
 
-[dependency badge]: https://deps.rs/repo/github/hashcatHitman/lint_wizard/status.svg
-[deps.rs]: https://deps.rs/repo/github/hashcatHitman/lint_wizard
+[dependency badge]: https://deps.rs/repo/github/hashcatHitman/lint-wizard/status.svg
+[deps.rs]: https://deps.rs/repo/github/hashcatHitman/lint-wizard
 
-[Rust Quality Control status]: https://github.com/hashcatHitman/lint_wizard/actions/workflows/rust.yml/badge.svg
-[Rust Quality Control workflow]: https://github.com/hashcatHitman/lint_wizard/actions/workflows/rust.yml
+[Rust Quality Control status]: https://github.com/hashcatHitman/lint-wizard/actions/workflows/rust.yml/badge.svg
+[Rust Quality Control workflow]: https://github.com/hashcatHitman/lint-wizard/actions/workflows/rust.yml
 
-[CodeQL]: https://github.com/hashcatHitman/lint_wizard/actions/workflows/github-code-scanning/codeql/badge.svg
-[CodeQL workflow]: https://github.com/hashcatHitman/lint_wizard/actions/workflows/github-code-scanning/codeql
+[CodeQL]: https://github.com/hashcatHitman/lint-wizard/actions/workflows/github-code-scanning/codeql/badge.svg
+[CodeQL workflow]: https://github.com/hashcatHitman/lint-wizard/actions/workflows/github-code-scanning/codeql
 
-[Zizmor status]: https://github.com/hashcatHitman/lint_wizard/actions/workflows/zizmor.yml/badge.svg
-[Zizmor workflow]: https://github.com/hashcatHitman/lint_wizard/actions/workflows/zizmor.yml
+[Zizmor status]: https://github.com/hashcatHitman/lint-wizard/actions/workflows/zizmor.yml/badge.svg
+[Zizmor workflow]: https://github.com/hashcatHitman/lint-wizard/actions/workflows/zizmor.yml
 
-[REUSE status]: https://github.com/hashcatHitman/lint_wizard/actions/workflows/reuse.yml/badge.svg
-[REUSE workflow]:https://github.com/hashcatHitman/lint_wizard/actions/workflows/reuse.yml
+[REUSE status]: https://github.com/hashcatHitman/lint-wizard/actions/workflows/reuse.yml/badge.svg
+[REUSE workflow]:https://github.com/hashcatHitman/lint-wizard/actions/workflows/reuse.yml
 
 [recommended Rust installation method]: https://www.rust-lang.org/tools/install
 
