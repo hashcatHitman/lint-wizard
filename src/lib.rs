@@ -25,6 +25,7 @@ use crate::lints::{BasicLint, LintLevel};
 
 pub mod config;
 pub mod lints;
+pub mod report;
 
 pub fn extract_next_lints<'src>(
     lines: &mut Map<Lines<'src>, fn(&str) -> &str>,
