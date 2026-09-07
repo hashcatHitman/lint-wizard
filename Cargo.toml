@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0 OR MIT
 
 [package]
-name = "lint_wizard"
+name = "lint-wizard"
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.97.1"
@@ -11,7 +11,7 @@ description = """
 A tool for maintaining lint configurations.
 """
 readme = "README.md"
-repository = "https://github.com/hashcatHitman/lint_wizard"
+repository = "https://github.com/hashcatHitman/lint-wizard"
 license = "Apache-2.0 OR MIT"
 keywords = ["clippy", "lints", "configuration"]
 categories = ["command-line-utilities", "development-tools"]
