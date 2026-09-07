@@ -2,8 +2,10 @@
 //
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
+extern crate alloc;
+
+use alloc::collections::btree_map::BTreeMap;
 use core::error::Error;
-use std::collections::HashMap;
 
 use cargo_util_schemas::manifest::{TomlLint, TomlManifest};
 
@@ -28,7 +30,7 @@ impl ConfigManager {
     ) -> Result<
         (
             Vec<ConfiguredRustcLint<'src>>,
-            HashMap<RustcGroup, &'toml TomlLint>,
+            BTreeMap<RustcGroup, &'toml TomlLint>,
         ),
         Box<dyn Error>,
     > {
@@ -36,8 +38,8 @@ impl ConfigManager {
 
         let rustc_lint_configs = manifest_lints.get("rust").unwrap();
 
-        let mut configured_groups = HashMap::new();
-        let mut configured_lints = HashMap::new();
+        let mut configured_groups = BTreeMap::new();
+        let mut configured_lints = BTreeMap::new();
 
         for (identifier, config) in rustc_lint_configs {
             let identifier = identifier.replace('_', "-");
@@ -84,7 +86,7 @@ impl ConfigManager {
     ) -> Result<
         (
             Vec<ConfiguredClippyLint<'src>>,
-            HashMap<ClippyGroup, &'toml TomlLint>,
+            BTreeMap<ClippyGroup, &'toml TomlLint>,
         ),
         Box<dyn Error>,
     > {
@@ -92,8 +94,8 @@ impl ConfigManager {
 
         let clippy_lint_configs = manifest_lints.get("clippy").unwrap();
 
-        let mut configured_groups = HashMap::new();
-        let mut configured_lints = HashMap::new();
+        let mut configured_groups = BTreeMap::new();
+        let mut configured_lints = BTreeMap::new();
 
         let mut clippyall = None;
 
