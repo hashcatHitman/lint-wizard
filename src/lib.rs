@@ -13,6 +13,7 @@
     clippy::type_complexity,
     clippy::use_debug,
     clippy::unwrap_used,
+    clippy::module_name_repetitions,
     reason = "todo later"
 )]
 
