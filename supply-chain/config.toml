@@ -45,6 +45,10 @@ criteria = "safe-to-deploy"
 version = "2.13.0"
 criteria = "safe-to-deploy"
 
+[[exemptions.memchr]]
+version = "2.7.6"
+criteria = "safe-to-deploy"
+
 [[exemptions.ordered-float]]
 version = "2.10.1"
 criteria = "safe-to-deploy"
