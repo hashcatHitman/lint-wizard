@@ -17,12 +17,12 @@
 )]
 
 use core::error::Error;
-use std::{fs, process};
+use std::fs;
 
 use cargo_util_schemas::manifest::TomlManifest;
 use lint_wizard::config::ConfigManager;
 use lint_wizard::report::LintReport;
-use lint_wizard::{self as _, Initialized};
+use lint_wizard::{self as _, Initialized, get_command_output};
 
 /// This isn't a real project.
 ///
@@ -30,11 +30,7 @@ use lint_wizard::{self as _, Initialized};
 /// println!("hello")
 /// ```
 fn main() -> Result<(), Box<dyn Error>> {
-    let out = process::Command::new("clippy-driver")
-        .arg("-Whelp")
-        .output()?;
-
-    let stdout = String::from_utf8(out.stdout)?;
+    let stdout = get_command_output("clippy-driver", "-Whelp")?;
 
     let (rustc_lints_grouped, clippy_lints_grouped) = Initialized::new(&stdout)
         .parse_rustc_lints()
