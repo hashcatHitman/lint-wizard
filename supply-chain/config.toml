@@ -61,6 +61,10 @@ criteria = "safe-to-deploy"
 version = "1.12.2"
 criteria = "safe-to-deploy"
 
+[[exemptions.regex-automata]]
+version = "0.4.13"
+criteria = "safe-to-deploy"
+
 [[exemptions.semver]]
 version = "1.0.27"
 criteria = "safe-to-deploy"
