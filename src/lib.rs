@@ -19,14 +19,26 @@
 
 use core::iter::Map;
 use core::str::Lines;
+use std::ffi::OsStr;
+use std::process;
 
 use crate::lints::clippy::{ClippyGroup, GroupedClippyLint};
 use crate::lints::rustc::{GroupedRustcLint, RustcGroup};
 use crate::lints::{BasicLint, LintLevel};
 
 pub mod config;
+pub mod error;
 pub mod lints;
 pub mod report;
+
+pub fn get_command_output<C: AsRef<OsStr>, A: AsRef<OsStr>>(
+    command: C,
+    arg: A,
+) -> Result<String, error::CommandOutput> {
+    let out = process::Command::new(command).arg(arg).output()?;
+
+    Ok(String::from_utf8(out.stdout)?)
+}
 
 pub fn extract_next_lints<'src>(
     lines: &mut Map<Lines<'src>, fn(&str) -> &str>,
