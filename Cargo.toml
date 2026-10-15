@@ -18,7 +18,7 @@ categories = ["command-line-utilities", "development-tools"]
 publish = false
 
 [dependencies]
-cargo-util-schemas = "0.11.0"
+cargo-util-schemas = "0.13.0"
 error_set = "0.9.1"
 toml = "1.0.3"
 
