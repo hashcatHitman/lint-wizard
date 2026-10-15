@@ -9,3 +9,9 @@ notes = """
 No unsafe used. Does some optional filesystem access, but it's fairly avoidable
 and straightforward. Nothing concerning.
 """
+
+[[audits.error_set_impl]]
+who = "hashcatHitman <155700084+hashcatHitman@users.noreply.github.com>"
+criteria = "safe-to-deploy"
+delta = "0.9.1 -> 0.9.2"
+notes = "Small and simple update with no concerns."
